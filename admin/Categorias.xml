@@ -1,0 +1,17 @@
+<tienda>
+	<categoria>
+		<nombre>Proteínas</nombre>
+		<descripcion>tal tal y tal</descripcion>
+		<imagen>img/categorias/proteinas.jpg</imagen>
+	</categoria>
+	<categoria>
+		<nombre>Perdida de peso</nombre>
+		<descripcion>tal tal y tal</descripcion>
+		<imagen>img/categorias/lostWeight.jpg</imagen>
+	</categoria>
+	<categoria>
+		<nombre>Vitaminas y Salud</nombre>
+		<descripcion>tal tal y tal</descripcion>
+		<imagen>img/categorias/VitaminasSalud.jpg</imagen>
+	</categoria>
+</tienda>

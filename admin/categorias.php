@@ -1,0 +1,145 @@
+<?php 
+	include("Seguridad.php"); 
+?>
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+	<title>Carrito de compras</title>
+	
+	<meta charset="utf-8">
+	<meta keywords="">
+	<meta description="">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+
+	<!-- 
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	
+	-->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" type="text/css" href="estilos/estilos.css">
+	
+
+
+</head>
+
+<body>
+	<!-- Header, nav y breadcrumbs -->
+	<?php
+		include("header.php");
+	?>
+	<!-- Fin header, nav y breadcrumbs -->
+	<main>
+		<!-- Modal para eliminar categorias -->
+			<div class="modal fade"	id="exampleModal" tabindex="-10" aria-labelldby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+				<div class="modal-dialog">
+						<div class="modal-content" style="width: 600px;">
+							<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Eliminar categoria "<span id="catBaja"></span>"</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form class="modal-content animate" enctype="multipart/form-data" id="formBajaCat">
+							¿Estás seguro de eliminar la categoria seleccionada?
+							<input type="hidden" name="idCat" id="idCat">
+						</form>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dimiss="modal" id="noEliminar">No</button>
+							<button type="button" class="btn btn-primary" id="btoEliminarCat">Sí</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- Fin de modal para eliminar categorias -->
+		<!-- Formulario "agregar categoría"-->
+			<img id="btoAgregarCat" src="../img/agregar.png" onclick="document.getElementById('id01').style.display='block'">
+			
+			<!-- The Modal -->
+			<div id="id01" class="modal">
+				<span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+
+				<div class="alert alert-dismissible alert-info" id="msjBox" style="display: none;">
+					<button type="button" class="close" data-dismiss="alert">&times;
+					</button>
+					<span id="mensaje">Aquí va el mensaje</span>
+				</div>
+				  <!-- Modal Content -->
+				  <form class="modal-content animate" method="POST" enctype="multipart/form-data" id="formAltaCat">
+				  	<div class="form-group">
+				  		<span class="" id="mensaje" style="display: none;">
+				  			Mensaje de confirmación o error
+				  		</span>
+				  	</div>
+				   <div class="form-group">
+							<label for="nombreCat">Nombre de categoría:</label>
+						<input type="text" name="cat_name" id="nombreCat" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="descCat">Descripción:</label>
+				  		<textarea name="descripcion" placeholder="Escribe la descripción de la categoría..." id="descCat" class="form-control"></textarea>
+				  	</div>
+
+				  	<div class="form-group">
+						<label for="catPadre">Subcategoría de:</label>
+				  		<div id="opCats"></div>
+				  	</div>
+
+				  	<div class="form-group">
+				  		<input type="hidden" name="MAX_FILE_SIZE" value="2000000"/>
+					    <label for="imgCat">Imagen</label>
+					    <input type="file" class="form-control-file" id="imgCat" name="imgCat">
+					</div>
+
+				    <div class="container">
+				      <button type="submit" id="altaCatBto">Guardar</button>
+				      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancelar</button>
+				    </div>
+				  </form>
+			</div>
+			<!-- Fin Formulario nueva categoría -->
+
+		<h2>CATEGORÍAS DE PRODUCTOS</h2>
+		<!-- Busquedas filtradas -->
+		<input type="text" id="busqueda" onkeyup="filtroBuscar()" placeholder="Busqueda por categorías...">
+		<!-- Fin busquedas filtradas -->
+
+		<div id="tablaCats"></div>
+
+		<div>
+		  <ul class="pagination">
+		    <li class="page-item disabled">
+		      <a class="page-link" href="#">&laquo;</a>
+		    </li>
+		    <li class="page-item active">
+		      <a class="page-link" href="#">1</a>
+		    </li>
+		    <li class="page-item">
+		      <a class="page-link" href="#">2</a>
+		    </li>
+		    <li class="page-item">
+		      <a class="page-link" href="#">3</a>
+		    </li>
+		    <li class="page-item">
+		      <a class="page-link" href="#">4</a>
+		    </li>
+		    <li class="page-item">
+		      <a class="page-link" href="#">5</a>
+		    </li>
+		    <li class="page-item">
+		      <a class="page-link" href="#">&raquo;</a>
+		    </li>
+		  </ul>
+		</div>
+	</main>
+	<!-- Footer -->
+	<?php
+		include("footer.php");
+	?>
+	<!-- Fin Footer -->
+
+	<script type="text/javascript" src="../js/Scripts.js"></script>
+</body>
+</html>
